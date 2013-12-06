@@ -11,7 +11,7 @@
 
 ;*******************************************************************
 ;
-;  filename  ::   Light and Sound
+;  name  ::   Lightmeter
 ;  ===================================
 ;
 ; Description:  The program reads an analog voltage value on PORTA bit1 at every time
