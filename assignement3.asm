@@ -44,11 +44,11 @@ w_temp		equ	h'7D'		; variable used for context saving
 status_temp	equ	h'7E'		; variable used for context saving
 pclath_temp	equ	h'7F'		; variable used for context saving
 
-cnt1      	 		equ     h'21'
-copyofadresh		equ		h'22'
-copyofadresl		equ 	h'23'
+cnt1      	 		eq		h'21'
+copyofadresh			equ		h'22'
+copyofadresl			equ 		h'23'
 delcnt				equ		h'24'
-result1				equ 	h'25'
+result1				equ 		h'25'
 result0				equ		h'26'
 resultl				equ		h'27'
 resultl0			equ		h'28'
@@ -58,12 +58,12 @@ final				equ		h'31'
 delcnt1				equ		h'32'
 cnt2				equ		h'33'
 ccpr1lvalue			equ		h'33'
-ccp1convalue		equ		h'34'
+ccp1convalue			equ		h'34'
 t2convalue			equ		h'35'
 pr2value			equ		h'A1'
 
 first				equ		h'36'
-myvalue				equ     h'37'
+myvalue				equ     	h'37'
 last				equ		h'38'
 second				equ		h'39'
 third				equ		h'40'
@@ -113,7 +113,7 @@ Init
 	bsf     STATUS, RP0        ; enable page 1 register set
 	bcf		STATUS, RP1	
 	movlw	b'10001000'
-	movwf	ADCON1		   	   ; set PORTA to be analog input VREF+ and vref- and right justified
+	movwf	ADCON1		   ; set PORTA to be analog input VREF+ and vref- and right justified
 
 	movlw   b'00000000'                 
 	movwf   TRISB              ; set port B as input
@@ -124,7 +124,7 @@ Init
 	
 	bcf     STATUS, RP0        ; back to page 0 register set
 	movlw	b'10001001'
-	movwf	ADCON0			   ;Set PORTA to allows AN1 as analog input and to power the DAC
+	movwf	ADCON0	           ;Set PORTA to allows AN1 as analog input and to power the DAC
 	clrf PORTB
 	clrf PORTC
 	return
@@ -159,27 +159,27 @@ int_routine
 ;    delcnt
 ; Calls
 ;    none
-del100us						; delay of 100us   call = 2uS     (2)
-		movlw   d'23' 			;      + 1      	(3) move the value 23 to W register
+del100us				; delay of 100us   call = 2uS     (2)
+		movlw   d'23' 		;      + 1      	(3) move the value 23 to W register
     	movwf   delcnt			;      + 1      	(4) put W register in delcnt
-loop1	nop						;      + 1     		(5) do nothing during 1us
+loop1	nop				;      + 1     		(5) do nothing during 1us
      	decfsz  delcnt,d'1'		;      + 1    		(6) delcnt decrements by 1 each time and 
-	    goto    loop1			;      + 1    		(7) return to label loop2. When it reach 0
-     	return					;      + 2      	(98) it go to return
+	    goto    loop1		;      + 1    		(7) return to label loop2. When it reach 0
+     	return				;      + 2      	(98) it go to return
 ;******************************************************************* 
 ;* del500us : Provide a 500 microsecond delay.
 ; Memory used
 ;    delcnt1
 ; Calls
 ;    none
-del500us						; delay of 500us   call = 2uS    (   2)
-		movlw   d'99'			;      + 1      (   3) move the value 99 to W register
+del500us				; delay of 500us   call = 2uS    (   2)
+		movlw   d'99'		;      + 1      (   3) move the value 99 to W register
     	movwf   delcnt1			;      + 1      (   4) put W register in delcnt
-loop2	nop						;      + 99     ( 103) do nothing during 1us
-        nop						;      + 99     ( 202) do nothing during 1us
+loop2	nop				;      + 99     ( 103) do nothing during 1us
+        nop				;      + 99     ( 202) do nothing during 1us
      	decfsz  delcnt1,d'1'		;      + 100    ( 302) delcnt decrements by 1 each time and 
-	    goto    loop2			;      + 196    ( 498) return to label loop1. When it reach 0 
-     	return					;      + 2      ( 500) it jumps the next instruction it go to return 
+	    goto    loop2		;      + 196    ( 498) return to label loop1. When it reach 0 
+     	return				;      + 2      ( 500) it jumps the next instruction it go to return 
 ;*******************************************************************
 ;* del5ms : Provide a 5 milliseconds delay.
 ; Memory used
@@ -187,13 +187,13 @@ loop2	nop						;      + 99     ( 103) do nothing during 1us
 ; Calls
 ;    del500us
 del5ms; delay of 5ms
-		movlw d'101';			move the value 101 to W register
-		movwf cnt2;				put W register in cnt1
-loop40	decfsz cnt2,d'1';		cnt1 decrements by 1 
-		goto loop30;				go to label loop6
-		goto forexit;			go to label forexit2
-loop30	call del500us;			call the subroutine del500us
-		goto loop40;				go to label loop5
+		movlw d'101'		;move the value 101 to W register
+		movwf cnt2		;put W register in cnt1
+loop40	decfsz cnt2,d'1'		;cnt1 decrements by 1 
+		goto loop30		;go to label loop6
+		goto forexit		;go to label forexit2
+loop30	call del500us			;call the subroutine del500us
+		goto loop40		;go to label loop5
 forexit return;
 ;*******************************************************************
 ;* addition16bits : Do an addition over 16 bits by using two registers.
@@ -235,33 +235,33 @@ divideby256
 ;    del100us
 getadcvalue
 		call del100us
-		bsf ADCON0,GO;			start conversion
-		call del100us;			call subroutine del100us
-waitadc	btfsc ADCON0,NOT_DONE;	wait until the conversion is done
-		goto waitadc;			go to label waitadc if still converting
-		movf ADRESH,W;			move the content of adresh into w register
-		movwf copyofadresh;		move w register into adcout+1
-		bsf     STATUS, RP0     ; enable page 1 register set
+		bsf ADCON0,GO			;start conversion
+		call del100us			;call subroutine del100us
+waitadc	btfsc ADCON0,NOT_DONE			;wait until the conversion is done
+		goto waitadc			;go to label waitadc if still converting
+		movf ADRESH,W			;move the content of adresh into w register
+		movwf copyofadresh		;move w register into adcout+1
+		bsf     STATUS, RP0     	; enable page 1 register set
 		bcf		STATUS, RP1	
-		movf ADRESL,W;			move the content of adresh into w register
-		bcf     STATUS, RP0     ; come back on page 0 register set
-		movwf copyofadresl;		move w register into adcout
+		movf ADRESL,W			;move the content of adresh into w register
+		bcf     STATUS, RP0     	;come back on page 0 register set
+		movwf copyofadresl		;move w register into adcout
 		return
 ;****************************************************************** 
 ;* multiplyby10 : Multiply the ADC value by 10 doing 10 times an addition over 16 bits
-;				  range:(0-10240)
+;		  range:(0-10240)
 ; Memory used
 ;    cnt1
 ; Calls
 ;    addition16bits
 multiplyby10
-		movlw d'11';				move the value 10 to W register ! do it 9 times
-		movwf cnt1;				put W register in cnt1
-loop4	decfsz cnt1,d'1';		cnt1 decrements by 1
-		goto loop5;				go to label loop8
-		goto forexit3;			go to forexit3
-loop5	call addition16bits;			call the subroutine del500us
-		goto loop4;				go to label loop7
+		movlw d'11'			;move the value 10 to W register ! do it 9 times
+		movwf cnt1			;put W register in cnt1
+loop4	decfsz cnt1,d'1'			;cnt1 decrements by 1
+		goto loop5			;go to label loop8
+		goto forexit3			;go to forexit3
+loop5	call addition16bits			;call the subroutine del500us
+		goto loop4			;go to label loop7
 forexit3
 		return
 ;****************************************************************** 
@@ -274,19 +274,19 @@ setpwm
 	bsf  STATUS, RP0        
 	movf pr2value,W
 	movwf PR2					;put this value in PR2
-	bcf  STATUS, RP0        ; back to page 0 register set
+	bcf  STATUS, RP0        			;back to page 0 register set
 	clrf CCPR1L					;clear register CCPR1L
 	movf ccp1convalue,W
 	movwf CCP1CON
-	bsf     STATUS, RP0        ; enable page 1 register set
-	bcf TRISC,d'2'				;clear PORTC bit 2
-	bcf STATUS,RP0				;back to page0
+	bsf     STATUS, RP0     			;enable page 1 register set
+	bcf TRISC,d'2'					;clear PORTC bit 2
+	bcf STATUS,RP0					;back to page0
 	movf t2convalue,W
 	movwf T2CON
 	clrf TMR2
 	bsf TMR2,TMR2ON
 	movf ccpr1lvalue,W
-    movwf   CCPR1L			;set duty cycle at 50%
+    movwf   CCPR1L					;set duty cycle at 50%
 	return
 ;****************************************************************** 
 ;* clrvalues : Clear all the parameters values of the PWM signal to switch it off
@@ -308,8 +308,8 @@ clrvalues
 	return
 ;****************************************************************** 
 ;* checkvalue : From the ADC converted value (0-40) this subroutine decides  
-;			    which PWM period is set and which number is displayed on the 7 
-;				segment display.	
+;		which PWM period is set and which number is displayed on the 7 
+;		segment display.	
 ; Memory used
 ;    first,second,third,fourth,fifth,sixth,seventh,eighth,ninth,last
 ;	 final, myvalue
@@ -468,7 +468,7 @@ theexit
 ;****************************************************************** 
 ;****************************************************************** 
 ;* value0 : Set PWM parameter and 7 segment display for the first 
-;			range of adc value (0-3) value:0 , frequency:2700Hz
+;	    range of adc value (0-3) value:0 , frequency:2700Hz
 ; Memory used
 ;    pr2value,ccp1convalue,t2convalue,ccpr1lvalue,tempo
 ; Calls
@@ -490,7 +490,7 @@ value0
 ;****************************************************************** 
 ;****************************************************************** 
 ;* value1 : Set PWM parameter and 7 segment display for the first 
-;			range of adc value (4-7) value:1 , frequency:2250Hz
+;	    range of adc value (4-7) value:1 , frequency:2250Hz
 ; Memory used
 ;    pr2value,ccp1convalue,t2convalue,ccpr1lvalue,tempo
 ; Calls
@@ -512,7 +512,7 @@ value1
 ;******************************************************************
 ;****************************************************************** 
 ;* value2 : Set PWM parameter and 7 segment display for the first 
-;			range of adc value (8-11) value:2 , frequency:2000Hz
+;	    range of adc value (8-11) value:2 , frequency:2000Hz
 ; Memory used
 ;    pr2value,ccp1convalue,t2convalue,ccpr1lvalue,tempo
 ; Calls
@@ -534,7 +534,7 @@ value2
 ;******************************************************************
 ;****************************************************************** 
 ;* value3 : Set PWM parameter and 7 segment display for the first 
-;			range of adc value (12-15) value:3 , frequency:1750Hz
+;	    range of adc value (12-15) value:3 , frequency:1750Hz
 ; Memory used
 ;    pr2value,ccp1convalue,t2convalue,ccpr1lvalue,tempo
 ; Calls
@@ -556,7 +556,7 @@ value3
 ;****************************************************************** 
 ;****************************************************************** 
 ;* value4 : Set PWM parameter and 7 segment display for the first 
-;			range of adc value (16-19) value:4 , frequency:1500Hz
+;	    range of adc value (16-19) value:4 , frequency:1500Hz
 ; Memory used
 ;    pr2value,ccp1convalue,t2convalue,ccpr1lvalue,tempo
 ; Calls
@@ -578,7 +578,7 @@ value4
 ;****************************************************************** 
 ;****************************************************************** 
 ;* value5 : Set PWM parameter and 7 segment display for the first 
-;			range of adc value (20-23) value:5 , frequency:1250Hz
+;	     range of adc value (20-23) value:5 , frequency:1250Hz
 ; Memory used
 ;    pr2value,ccp1convalue,t2convalue,ccpr1lvalue,tempo
 ; Calls
@@ -600,7 +600,7 @@ value5
 ;****************************************************************** 
 ;****************************************************************** 
 ;* value6 : Set PWM parameter and 7 segment display for the first 
-;			range of adc value (24-27) value:6 , frequency:1000Hz
+;	    range of adc value (24-27) value:6 , frequency:1000Hz
 ; Memory used
 ;    pr2value,ccp1convalue,t2convalue,ccpr1lvalue,tempo
 ; Calls
@@ -622,7 +622,7 @@ value6
 ;****************************************************************** 
 ;****************************************************************** 
 ;* value7 : Set PWM parameter and 7 segment display for the first 
-;			range of adc value (28-31) value:7 , frequency:750Hz
+;	    range of adc value (28-31) value:7 , frequency:750Hz
 ; Memory used
 ;    pr2value,ccp1convalue,t2convalue,ccpr1lvalue,tempo
 ; Calls
@@ -644,7 +644,7 @@ value7
 ;****************************************************************** 
 ;****************************************************************** 
 ;* value8 : Set PWM parameter and 7 segment display for the first 
-;			range of adc value (32-35) value:8 , frequency:500Hz
+;	    range of adc value (32-35) value:8 , frequency:500Hz
 ; Memory used
 ;    pr2value,ccp1convalue,t2convalue,ccpr1lvalue,tempo
 ; Calls
@@ -667,7 +667,7 @@ value8
 ;****************************************************************** 
 ;****************************************************************** 
 ;* value9 : Set PWM parameter and 7 segment display for the first 
-;			range of adc value (36-40) value:9 , frequency:250Hz
+;           range of adc value (36-40) value:9 , frequency:250Hz
 ; Memory used
 ;    pr2value,ccp1convalue,t2convalue,ccpr1lvalue,tempo
 ; Calls
@@ -690,7 +690,7 @@ value9
 ;******************************************************************
 ; MAIN program: When the switch on port B bit 1 a PWM signal is produced
 ;               on bit PORTC bit 2 otherwise a number is displayed on the
-;				4 first bit(0,1,2,3) on PORTD.
+;		4 first bit(0,1,2,3) on PORTD.
 ; Calls
 ;    setpwm, del5ms, clrvalues, checkvalues
 ; ============
